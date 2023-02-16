@@ -10,5 +10,8 @@
     <string name="web_socket_close">websocket关闭</string>
     <string name="web_socket_send">websocket发送</string>
     <string name="socket_io">socketio实现聊天室</string>
+    <string name="socket_io_connect">连接</string>
+    <string name="socket_io_disconnect">断开</string>
+    <string name="socket_io_send">发送</string>
 
 </resources>

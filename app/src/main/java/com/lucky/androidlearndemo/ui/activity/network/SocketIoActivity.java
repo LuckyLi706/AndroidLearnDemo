@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lucky.androidlearndemo.R;
 import com.lucky.androidlearndemo.base.BaseActivity;
 import com.lucky.androidlearndemo.manger.SocketIoManager;
-import com.lucky.androidlearndemo.manger.WebSocketManager;
 import com.lucky.androidlearndemo.model.ChatModel;
 import com.lucky.androidlearndemo.util.ToastUtil;
 
@@ -29,7 +28,7 @@ import io.socket.emitter.Emitter;
 
 public class SocketIoActivity extends BaseActivity {
 
-    private static final String ROOM_ID = "room_1";
+    private static final String EVENT_MESSAGE = "information";
     private RecyclerView recyclerView;
     List<ChatModel> chatModelList = new ArrayList<ChatModel>();
     ChatAdapter chatAdapter;
@@ -39,26 +38,37 @@ public class SocketIoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_socket_io);
         initRecycler();
-        initSocketIo();
 
         final EditText editText = findViewById(R.id.et_chat_message);
+        //连接
+        findViewById(R.id.btn_connect).setOnClickListener((v) -> {
+            if (SocketIoManager.getInstance().isConnect()) {
+                ToastUtil.showToast("已经连接");
+                return;
+            }
+            connect();
+        });
+        //断开连接
+        findViewById(R.id.btn_disconnect).setOnClickListener((v) -> {
+            SocketIoManager.getInstance().disconnect();
+        });
         //发送消息
         findViewById(R.id.btn_send).setOnClickListener((v) -> {
             if (TextUtils.isEmpty(editText.getText().toString())) {
+                ToastUtil.showToast("输入框不能为空");
                 return;
             }
-            SocketIoManager.getInstance().send(ROOM_ID, editText.getText().toString());
+            SocketIoManager.getInstance().send(EVENT_MESSAGE, editText.getText().toString());
             sendMessage(editText.getText().toString());
         });
     }
 
-    private void initSocketIo() {
+    private void connect() {
         SocketIoManager.getInstance().connect();
-
-        SocketIoManager.getInstance().receiver(ROOM_ID, new Emitter.Listener() {
+        SocketIoManager.getInstance().connectStatusEvent(EVENT_MESSAGE, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                ToastUtil.showToast(args[0].toString());
+                receiveMessage(args[0].toString());
             }
         });
     }
@@ -92,10 +102,12 @@ public class SocketIoActivity extends BaseActivity {
      * @param message
      */
     void receiveMessage(String message) {
-        ChatModel chatModel = new ChatModel(R.mipmap.ic_launcher,"邱淑贞", message, ChatModel.RECEIVE);
-        chatModelList.add(chatModel);
-        chatAdapter.notifyItemInserted(chatModelList.size() - 1);
-        recyclerView.scrollToPosition(chatModelList.size() - 1);
+        runOnUiThread(() -> {
+            ChatModel chatModel = new ChatModel(R.mipmap.ic_launcher, "邱淑贞", message, ChatModel.RECEIVE);
+            chatModelList.add(chatModel);
+            chatAdapter.notifyItemInserted(chatModelList.size() - 1);
+            recyclerView.scrollToPosition(chatModelList.size() - 1);
+        });
     }
 
 
@@ -126,7 +138,7 @@ public class SocketIoActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             ChatModel chatModel = chatModelList.get(position);
-            if (chatModel.getType() == ChatModel.SEND) {
+            if (chatModel.getType() == ChatModel.RECEIVE) {
                 holder.leftLayout.setVisibility(View.GONE);
                 holder.rightLayout.setVisibility(View.VISIBLE);
                 holder.rightNameTextView.setText(chatModel.getName());
@@ -185,6 +197,6 @@ public class SocketIoActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        WebSocketManager.getInstance().close();
+        SocketIoManager.getInstance().disconnect();
     }
 }
