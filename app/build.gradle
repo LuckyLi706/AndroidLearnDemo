@@ -1,0 +1,68 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.lucky.androidlearndemo'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.lucky.androidlearndemo"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    //网络okhttp
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+
+    //图片和视频选择器
+    // PictureSelector basic (Necessary)
+    implementation 'io.github.lucksiege:pictureselector:v3.10.7'
+    // image compress library (Not necessary)
+    implementation 'io.github.lucksiege:compress:v3.10.7'
+    // uCrop library (Not necessary)
+    implementation 'io.github.lucksiege:ucrop:v3.10.7'
+    // simple camerax library (Not necessary)
+    implementation 'io.github.lucksiege:camerax:v3.10.7'
+    implementation "com.github.bumptech.glide:glide:4.13.2"
+
+    //动态申请权限
+    implementation 'com.uniquext.android:permission:2.1.2-SNAPSHOT'
+
+    //socketio
+    implementation ('io.socket:socket.io-client:2.0.0') {
+        exclude group: 'org.json', module: 'json'
+    }
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}

@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">安卓学习Demo</string>
+    <string name="about_network">网络相关</string>
+    <string name="okhttp">OkHttp</string>
+    <string name="get_request">GET请求</string>
+    <string name="post_request">POST请求</string>
+    <string name="upload_file">上传文件</string>
+    <string name="upload_files">上传多个文件</string>
+    <string name="web_socket_start">websocket启动</string>
+    <string name="web_socket_close">websocket关闭</string>
+    <string name="web_socket_send">websocket发送</string>
+    <string name="socket_io">socketio实现聊天室</string>
+
+</resources>
