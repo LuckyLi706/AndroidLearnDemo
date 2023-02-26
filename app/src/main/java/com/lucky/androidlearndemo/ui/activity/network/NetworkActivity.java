@@ -22,6 +22,7 @@ import com.lucky.androidlearndemo.util.ToastUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -132,13 +133,14 @@ public class NetworkActivity extends BaseActivity {
         return new OkHttpClient.Builder().readTimeout(3, TimeUnit.SECONDS)//设置读取超时时间
                 .writeTimeout(3, TimeUnit.SECONDS)//设置写的超时时间
                 .connectTimeout(3, TimeUnit.SECONDS)//设置连接超时时间
+                .proxy(Proxy.NO_PROXY)
                 .build();
     }
 
     private void sendGetRequest(OkHttpClient okHttpClient) {
         // 构造 Request
         Request.Builder builder = new Request.Builder();
-        Request request = builder.get().url(Constants.HTTP_URL + "/login?user=lijie&pass=123").build();
+        Request request = builder.get().url(Constants.HTTP_URL + Constants.BASE_URL + "/login?user=lijie&pass=123").build();
         // 将 Request 封装为 Call
         Call call = okHttpClient.newCall(request);
         // 执行 Call
@@ -163,7 +165,7 @@ public class NetworkActivity extends BaseActivity {
         String json = "{\"user\":\"lijie\",\"pass\":\"123\"}";
         RequestBody requestBodyJSon = RequestBody.create(MediaType.parse("application/json"), json);
         // 构造 Request
-        Request request = builder.post(requestBodyJSon).url(Constants.HTTP_URL + "/login").build();
+        Request request = builder.post(requestBodyJSon).url(Constants.HTTP_URL + Constants.BASE_URL + "/login").build();
         // 将 Request 封装为 Call
         Call call = okHttpClient.newCall(request);
         // 执行 Call
@@ -185,7 +187,7 @@ public class NetworkActivity extends BaseActivity {
         RequestBody requestBodyFile = RequestBody.create(MediaType.parse(FileUtil.getMIMEType(file)), file);
         // 构造 Request
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM).addFormDataPart("file", file.getName(), requestBodyFile).build();
-        Request request = builder.post(requestBody).url(Constants.HTTP_URL + "/upload").build();
+        Request request = builder.post(requestBody).url(Constants.HTTP_URL + Constants.BASE_URL + "/upload").build();
 
         // 将 Request 封装为 Call
         Call call = okHttpClient.newCall(request);
@@ -221,7 +223,7 @@ public class NetworkActivity extends BaseActivity {
             );
         }
         RequestBody requestBody = builder.build();
-        Request request = builderRequest.post(requestBody).url(Constants.HTTP_URL + "/upload_files").build();
+        Request request = builderRequest.post(requestBody).url(Constants.HTTP_URL + Constants.BASE_URL + "/upload_files").build();
         // 将 Request 封装为 Call
         Call call = okHttpClient.newCall(request);
         // 执行 Call

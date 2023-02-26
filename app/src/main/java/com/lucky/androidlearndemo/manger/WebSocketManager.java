@@ -47,7 +47,7 @@ public class WebSocketManager {
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
                 .build();
-        request = new Request.Builder().url(Constants.WEB_SOCKET_URL).build();
+        request = new Request.Builder().url(Constants.WEB_SOCKET_URL + Constants.BASE_URL).build();
         webSocketEventListener = message;
         connect();
     }

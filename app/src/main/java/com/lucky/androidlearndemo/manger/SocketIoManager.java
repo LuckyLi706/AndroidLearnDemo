@@ -35,7 +35,7 @@ public class SocketIoManager {
             return;
         }
         try {
-            mSocket = IO.socket(Constants.SOCKET_IO_URL);
+            mSocket = IO.socket(Constants.SOCKET_IO_URL + Constants.BASE_URL);
             mSocket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
