@@ -10,6 +10,16 @@
     <string name="web_socket_close">websocket关闭</string>
     <string name="web_socket_send">websocket发送</string>
     <string name="socket_io">socketio实现聊天室</string>
+    <string name="udp">UDP协议</string>
+    <string name="udp_connect">UDP连接</string>
+    <string name="udp_close">UDP关闭</string>
+    <string name="udp_send">UDP发送消息</string>
+    <string name="tcp">TCP协议</string>
+    <string name="tcp_byte">字节读取</string>
+    <string name="tcp_line">行读取</string>
+    <string name="tcp_connect">TCP连接</string>
+    <string name="tcp_close">TCP关闭</string>
+    <string name="tcp_send">TCP发送消息</string>
     <string name="socket_io_connect">连接</string>
     <string name="socket_io_disconnect">断开</string>
     <string name="socket_io_send">发送</string>

@@ -124,6 +124,14 @@ public class NetworkActivity extends BaseActivity {
             startActivity(new Intent(this, SocketIoActivity.class));
         });
 
+        findViewById(R.id.udp).setOnClickListener(view -> {
+            startActivity(new Intent(this, UdpClientActivity.class));
+        });
+
+        findViewById(R.id.tcp).setOnClickListener(view -> {
+            startActivity(new Intent(this, TcpClientActivity.class));
+        });
+
         findViewById(R.id.fab).setOnClickListener(view -> {
             DialogTools.ShowInputDialog(this);
         });

@@ -92,6 +92,20 @@
                 android:text="@string/socket_io"
                 android:textColor="@color/black" />
 
+            <Button
+                android:id="@+id/udp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/udp"
+                android:textColor="@color/black" />
+
+            <Button
+                android:id="@+id/tcp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tcp"
+                android:textColor="@color/black" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
