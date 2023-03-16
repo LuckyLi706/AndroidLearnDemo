@@ -1,143 +1,126 @@
 package com.lucky.androidlearndemo.ui.activity.network;
 
-import android.content.Context;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.widget.Toast;
+import android.text.method.ScrollingMovementMethod;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.lucky.androidlearndemo.App;
+import com.lucky.androidlearndemo.Constants;
 import com.lucky.androidlearndemo.R;
+import com.lucky.androidlearndemo.util.ToastUtil;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+/**
+ *   UDP 协议能发但是收不到消息
+ *   目前在安卓上面有这个现象，目前仍然没有解决。
+ */
 public class UdpClientActivity extends AppCompatActivity {
-    /*
-     *   Data
-     * */
-    private final static String SEND_IP = "81.68.122.109";  //发送IP
-    private final static int SEND_PORT = 12345;               //发送端口号
-    private final static int RECEIVE_PORT = 22320;            //接收端口号
 
-    private boolean listenStatus = true;  //接收线程的循环标识
-    private byte[] receiveInfo;     //接收报文信息
-    private byte[] buf;
+    private EditText etIpPort;
+    private TextView tvShowText;
 
-    private DatagramSocket receiveSocket;
-    private DatagramSocket sendSocket;
-    private InetAddress serverAddr;
-    private SendHandler sendHandler = new SendHandler();
-    private ReceiveHandler receiveHandler = new ReceiveHandler();
+    private DatagramSocket sendSocket = null;
+    private DatagramSocket receiveSocket = null;
 
-    private WifiManager.MulticastLock lock;
+    private ExecutorService executorService = Executors.newCachedThreadPool();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_udp_client);
 
-        findViewById(R.id.btn_udp_connect).setOnClickListener(view -> {
-        });
-
-        findViewById(R.id.btn_udp_close).setOnClickListener(view -> {
-            // disconnect();
-        });
+        tvShowText = findViewById(R.id.tv_udp_content);
+        tvShowText.setMovementMethod(ScrollingMovementMethod.getInstance());
+        etIpPort = findViewById(R.id.et_ip_port);
+        etIpPort.setText(Constants.BASE_URL);
 
         findViewById(R.id.btn_udp_send).setOnClickListener(view -> {
-            new UdpSendThread().start();
+            String ipPort = etIpPort.getText().toString();
+            String message = ((EditText) findViewById(R.id.et_message)).getText().toString();
+            if (ipPort.isEmpty()) {
+                ToastUtil.showToast("当前地址不能为空");
+                return;
+            }
+            if (message.isEmpty()) {
+                ToastUtil.showToast("发送消息内容不能为空");
+                return;
+            }
+            executorService.execute(() -> {
+                sendMessage(message, ipPort);
+            });
         });
 
-        WifiManager manager = (WifiManager) App.getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        lock= manager.createMulticastLock("test wifi");
-
-        new UdpReceiveThread().start();
+        try {
+            receiveSocket = new DatagramSocket(8888);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        executorService.execute(this::receiveMessage);
     }
 
+    private void sendMessage(String message, String ipPort) {
 
-    public class UdpSendThread extends Thread
-    {
-        @Override
-        public void run()
-        {
-            try
-            {
-                buf = "i am an android developer, hello android! ".getBytes();
+        byte[] data = message.getBytes();
+        DatagramPacket dpSend = null;
+        try {
+            dpSend = new DatagramPacket(data, data.length, InetAddress.getByName(ipPort.split(":")[0]), Integer.parseInt(ipPort.split(":")[1]));
+            double start = System.currentTimeMillis();
+            sendSocket = new DatagramSocket();
+            sendSocket.send(dpSend);
+            sendSocket.close();
+            //double end = System.currentTimeMillis();
+            //double times = end - start;
 
-                // 创建DatagramSocket对象，使用随机端口
-                sendSocket = new DatagramSocket();
-                serverAddr = InetAddress.getByName(SEND_IP);
-
-                DatagramPacket outPacket = new DatagramPacket(buf, buf.length,serverAddr, SEND_PORT);
-                //lock.release();
-                sendSocket.send(outPacket);
-
-                sendSocket.close();
-                sendHandler.sendEmptyMessage(1);
-
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+//            byte[] receiveData = new byte[1024];
+//            DatagramPacket dpReceive = new DatagramPacket(receiveData, receiveData.length);
+//            try {
+//                receiveSocket.receive(dpReceive);
+//                System.out.println(new String(receiveData));
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    //udp接收线程
-    public class UdpReceiveThread extends Thread {
-        @Override
-        public void run() {
-            try {
-                receiveSocket = new DatagramSocket();
-                receiveSocket.setSoTimeout(2000);
-                serverAddr = InetAddress.getByName(SEND_IP);
-                while (listenStatus) {
-                    byte[] inBuf = new byte[1024];
-                    DatagramPacket inPacket = new DatagramPacket(inBuf, inBuf.length);
-                    try {
-                        //lock.release();
-                        receiveSocket.receive(inPacket);
-                        receiveInfo = inPacket.getData();
-                        receiveHandler.sendEmptyMessage(1);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+    private boolean isRunning = true;
+
+    private void receiveMessage() {
+
+        while (true) {
+            if (isRunning) {
+                byte[] receiveData = new byte[1024];
+                DatagramPacket dpReceive = null;
+                // ipList.clear();
+                dpReceive = new DatagramPacket(receiveData, receiveData.length);
+                try {
+                    receiveSocket.receive(dpReceive);
+                    System.out.println(new String(receiveData));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String recIp = dpReceive.getAddress().toString().substring(1);
+                if (dpReceive != null) {
 
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
 
-    class ReceiveHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            // tvMessage.setText("接收到数据了" + receiveInfo.toString());
-            Toast.makeText(UdpClientActivity.this, "接收到数据了", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    class SendHandler extends Handler{
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            //tvMessage.setText("UDP报文发送成功");
-            Toast.makeText(UdpClientActivity.this, "成功发送", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        listenStatus = false;
-        receiveSocket.close();
     }
 }

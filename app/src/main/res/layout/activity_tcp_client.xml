@@ -57,7 +57,7 @@
             android:id="@+id/et_send_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="输入要发送的数据" />
+            android:hint="@string/input_send_message" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,6 +71,7 @@
                 android:id="@+id/btn_tcp_connect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:layout_weight="1"
                 android:text="@string/tcp_connect" />
 
@@ -78,6 +79,7 @@
                 android:id="@+id/btn_tcp_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:layout_weight="1"
                 android:text="@string/tcp_close" />
 
@@ -85,8 +87,17 @@
                 android:id="@+id/btn_tcp_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="2dp"
                 android:layout_weight="1"
                 android:text="@string/tcp_send" />
+
+            <Button
+                android:id="@+id/btn_tcp_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:text="@string/tcp_clear" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
