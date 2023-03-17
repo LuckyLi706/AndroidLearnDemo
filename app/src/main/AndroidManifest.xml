@@ -33,8 +33,21 @@
         </activity>
         <activity android:name=".ui.activity.network.NetworkActivity" />
         <activity android:name=".ui.activity.network.SocketIoActivity" />
-        <activity android:name=".ui.activity.network.UdpClientActivity"/>
-        <activity android:name=".ui.activity.network.TcpClientActivity"/>
+        <activity android:name=".ui.activity.network.UdpClientActivity" />
+        <activity
+            android:name=".ui.activity.network.TcpClientActivity"
+            android:configChanges="keyboardHidden" />
+        <activity android:name=".ui.activity.network.VpnActivity" />
+
+
+        <service
+            android:name=".ui.service.NewVpnService"
+            android:exported="true"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

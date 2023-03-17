@@ -106,6 +106,13 @@
                 android:text="@string/tcp"
                 android:textColor="@color/black" />
 
+            <Button
+                android:id="@+id/vpn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/vpn"
+                android:textColor="@color/black" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

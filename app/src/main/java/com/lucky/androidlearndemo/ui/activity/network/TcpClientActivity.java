@@ -8,10 +8,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.lucky.androidlearndemo.Constants;
 import com.lucky.androidlearndemo.R;
+import com.lucky.androidlearndemo.base.BaseActivity;
 import com.lucky.androidlearndemo.util.ToastUtil;
 
 import java.io.BufferedReader;
@@ -25,7 +25,7 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class TcpClientActivity extends AppCompatActivity {
+public class TcpClientActivity extends BaseActivity {
     private Socket mSocket;
     private BufferedReader mReader;   //按字符流读取
     private PrintWriter mWriter;

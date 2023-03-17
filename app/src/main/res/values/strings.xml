@@ -26,5 +26,10 @@
     <string name="socket_io_disconnect">断开</string>
     <string name="socket_io_send">发送</string>
     <string name="input_send_message">输入要发送的信息</string>
+    <string name="vpn">VPN</string>
+    <string name="connect_vpn">连接VPN</string>
+    <string name="vpn_disconnect">vpn失去连接</string>
+    <string name="vpn_connect">vpn连接</string>
+    <string name="vpn_connecting">vpn连接中…</string>
 
 </resources>

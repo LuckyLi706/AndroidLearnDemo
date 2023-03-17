@@ -6,10 +6,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.lucky.androidlearndemo.Constants;
 import com.lucky.androidlearndemo.R;
+import com.lucky.androidlearndemo.base.BaseActivity;
 import com.lucky.androidlearndemo.util.ToastUtil;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
  *   UDP 协议能发但是收不到消息
  *   目前在安卓上面有这个现象，目前仍然没有解决。
  */
-public class UdpClientActivity extends AppCompatActivity {
+public class UdpClientActivity extends BaseActivity {
 
     private EditText etIpPort;
     private TextView tvShowText;

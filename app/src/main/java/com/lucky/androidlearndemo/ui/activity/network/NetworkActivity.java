@@ -132,6 +132,10 @@ public class NetworkActivity extends BaseActivity {
             startActivity(new Intent(this, TcpClientActivity.class));
         });
 
+        findViewById(R.id.vpn).setOnClickListener(view -> {
+            startActivity(new Intent(this, VpnActivity.class));
+        });
+
         findViewById(R.id.fab).setOnClickListener(view -> {
             DialogTools.ShowInputDialog(this);
         });
